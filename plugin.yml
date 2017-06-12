@@ -1,0 +1,11 @@
+name: Golfcraft
+main: musaddict.golfcraft.Golfcraft
+version: 1.6.0a [1.6.2-R0.1]
+description: Golfing companion for Bukkit.
+authors: [Musaddict,bass_clef_]
+softdepend: [Multiverse-Core, My Worlds]
+commands:
+  golf:
+    description: Everythin
+    usage: |
+        /<command> help
