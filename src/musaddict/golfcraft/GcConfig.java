@@ -91,7 +91,9 @@ public class GcConfig
 	  ROUGH("rough"),
 	  FAIRWAY("fairway"),
 	  GREEN("green"),
-	  HOLE("hole");
+	  HOLE("hole"),
+	  DRIVER("driver"),
+	  OB("ob");
 	  
 	  private String blockName;
 	  LandedBlock(String blockName) {

@@ -25,3 +25,7 @@ landed-block:
     "WOOL": 5
   hole:
     "GLOWSTONE": -1
+  driver:
+    "WOOD" : -1
+  ob:
+    "LEAVES" : -1

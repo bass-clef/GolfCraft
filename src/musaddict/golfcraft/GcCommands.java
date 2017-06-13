@@ -26,11 +26,6 @@ public class GcCommands
   public static HashMap<Player, Boolean> Golfing = new HashMap();
   public static HashMap<Player, String> playingHole = new HashMap();
   
-
-
-
-
-
   public boolean onCommand(CommandSender sender, Command command, String label, String[] arg)
   {
     Player player = (Player)sender;
