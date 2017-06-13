@@ -13,3 +13,15 @@ sandtrap-min-percent-decrease: 60
 sandtrap-max-percent-decrease: 80
 teeing-ground-min-percent-increase: 100
 teeing-ground-max-percent-increase: 130
+landed-block:
+  sand-trap:
+    "SAND": -1
+    "SOUL_SAND": -1
+  rough:
+    "GRASS": -1
+  fairway:
+    "WOOL": 13
+  green:
+    "WOOL": 5
+  hole:
+    "GLOWSTONE": -1

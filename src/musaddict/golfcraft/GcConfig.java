@@ -1,5 +1,11 @@
 package musaddict.golfcraft;
 
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class GcConfig
@@ -78,5 +84,37 @@ public class GcConfig
       Min = 99;
     int Base = 100 - Min;
     return Base;
+  }
+  
+  public static enum LandedBlock {
+	  SAND_TRAP("sand-trap"),
+	  ROUGH("rough"),
+	  FAIRWAY("fairway"),
+	  GREEN("green"),
+	  HOLE("hole");
+	  
+	  private String blockName;
+	  LandedBlock(String blockName) {
+		  this.blockName = blockName;
+	  }
+	  public String getName() {
+		  return this.blockName;
+	  }
+  }
+  public static boolean sameLandedBlock(LandedBlock landedBlock, Material targetMaterial, int targetData)
+  {
+	  Set<String> landedBlockNameList =
+			  plugin.getConfig().getConfigurationSection(
+					  "landed-block." + landedBlock.getName()).getKeys(false);
+	  for(String landedBlockName : landedBlockNameList) {
+		  Material configMaterial = Material.getMaterial(landedBlockName);
+		  int confidData = plugin.getConfig().getInt(
+				  "landed-block." + landedBlock.getName() +"."+ landedBlockName);
+		  if (((-1 == confidData) || (targetData == confidData)) && (configMaterial == targetMaterial)) {
+			  return true;
+		  }
+	  }
+	  
+	  return false;
   }
 }

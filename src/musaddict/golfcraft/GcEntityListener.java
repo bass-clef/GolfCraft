@@ -348,7 +348,6 @@ public class GcEntityListener
       finishedHole.put(shooter, Boolean.valueOf(false)); }
     int parA;
     int scoreFinal;
-//    Player[] arrayOfPlayer1;
     if (Continue) {
       int dist = (int)event.getEntity().getLocation().distance(shooter.getLocation());
       
@@ -360,19 +359,27 @@ public class GcEntityListener
         playersMessage = ChatColor.DARK_GREEN + shooterName + ChatColor.DARK_RED + " just landed in a lava hazard!";
         hazard = true;
       }
-      if ((block.getType() == Material.SAND) && (!hazard)) {
-        playersMessage = ChatColor.DARK_GREEN + shooterName + ChatColor.YELLOW + " just landed in a sand trap... " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
+      if (!hazard) {
+//        if (block.getType() == Material.SAND) {
+    	  if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.SAND_TRAP, block.getType(), block.getData())) {
+    		  playersMessage = ChatColor.DARK_GREEN + shooterName + ChatColor.YELLOW + " just landed in a sand trap... " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
+    	  }
+//    	  if (block.getType() == Material.GRASS) {
+    	  if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.ROUGH, block.getType(), block.getData())) {
+    		  playersMessage = ChatColor.DARK_GREEN + shooterName + ChatColor.GRAY + " just landed in the rough... " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
+    	  }
+//    	  if (block.getType() == Material.WOOL) && (block.getData() == 13) {
+    	  if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.FAIRWAY,  block.getType(), block.getData())) {
+    		  playersMessage = ChatColor.DARK_GREEN + shooterName + " just landed in the fairway! " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
+    	  }
+//    	  if (block.getType() == Material.WOOL) && (block.getData() == 5) {
+    	  if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.GREEN, block.getType(), block.getData())) {
+    		  playersMessage = ChatColor.DARK_GREEN + shooterName + ChatColor.GREEN + " just landed on the green. " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
+    	  }
       }
-      if ((block.getType() == Material.GRASS) && (!hazard)) {
-        playersMessage = ChatColor.DARK_GREEN + shooterName + ChatColor.GRAY + " just landed in the rough... " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
-      }
-      if ((block.getType() == Material.WOOL) && (block.getData() == 13) && (!hazard)) {
-        playersMessage = ChatColor.DARK_GREEN + shooterName + " just landed in the fairway! " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
-      }
-      if ((block.getType() == Material.WOOL) && (block.getData() == 5) && (!hazard)) {
-        playersMessage = ChatColor.DARK_GREEN + shooterName + ChatColor.GREEN + " just landed on the green. " + ChatColor.GRAY + "(" + ChatColor.AQUA + dist + "m" + ChatColor.GRAY + ")";
-      }
-      if ((block.getType() == Material.GLOWSTONE) && (!hazard))
+//      if ((block.getType() == Material.GLOWSTONE) && (!hazard))
+      if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.HOLE, block.getType(), block.getData())
+    		  && (!hazard))
       {
         if (GcCommands.playingHole.containsKey(shooter)) {
           GcHole existingHole = GcFiles.getHole(shooter.getWorld().getName(), (String)GcCommands.playingHole.get(shooter));
@@ -421,7 +428,6 @@ public class GcEntityListener
       }
       
       for(Player players : org.bukkit.Bukkit.getOnlinePlayers()){
-        
         if ((GcCommands.playingHole.containsKey(players)) && 
           (((String)GcCommands.playingHole.get(players)).equals(GcCommands.playingHole.get(shooter)))) {
           if ((playersMessage == null) && (block.getType() != Material.GLOWSTONE)) {
