@@ -1,9 +1,12 @@
 package musaddict.golfcraft;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -102,6 +105,41 @@ public class GcConfig
 		public String getName() {
 			return this.blockName;
 		}
+	}
+	
+	public static boolean setConfig(String path, String value)
+	{
+		try {
+			if (StringUtils.isNumeric(value)) {
+				plugin.getConfig().set(path, Integer.parseInt(value));
+			} else if (NumberUtils.isNumber(value)) {
+				plugin.getConfig().set(path, Double.parseDouble(value));
+			} else if (0 == value.indexOf("\"") && value.length()-1 == value.lastIndexOf("\"")) {
+				plugin.getConfig().set(path, value.substring(1, value.length()-1));
+			} else {
+				return false;
+			}
+		} catch(NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
+	public static String getConfig(String path)
+	{
+		return plugin.getConfig().getString(path);
+	}
+	public static Set<String> getConfigKey(String path)
+	{
+		Set<String> result = plugin.getConfig().getConfigurationSection(path).getKeys(false);
+		if (null == result) {
+			result = new HashSet<String>();
+		}
+		return result;
+	}
+	public static void saveConfig()
+	{
+		plugin.saveConfig();
+		plugin.reloadConfig();
 	}
 
 	public static LandedBlock whereLandedBlock(Material targetMaterial, int targetData)

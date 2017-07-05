@@ -247,6 +247,74 @@ implements CommandExecutor
 					return true;
 				}
 				
+				if (Command.equalsIgnoreCase("config")) {
+					String configType = null, configPath = null, configValue = null;
+					try {
+						configType = arg[1];
+					}
+					catch (IndexOutOfBoundsException e) {
+						player.sendMessage(ChatColor.GRAY + "Need to config path.");
+						player.sendMessage(ChatColor.GRAY + "/golf config show [path]");
+						player.sendMessage(ChatColor.GRAY + "/golf config change [path] [value]");
+						player.sendMessage(ChatColor.GRAY + "/golf config save");
+						player.sendMessage(ChatColor.GRAY + "/golf config list [path]");
+						return true;
+					}
+					
+					if (!configType.equals("save")) {
+						try
+						{
+							configPath	= arg[2];
+						}
+						catch (IndexOutOfBoundsException e) {
+							player.sendMessage("need config path. example for [hoge.foo.bar]");
+							return true;
+						}
+						
+						if (configType.equals("change")) {
+							try
+							{
+								configValue	= arg[3];
+							}
+							catch (IndexOutOfBoundsException e) {
+								player.sendMessage("need config value. if string value then add \" to both ends");
+								return true;
+							}
+						}
+					}
+					
+					if (configType.equals("save")) {
+						if ((player.isOp()) || (player.hasPermission("golf.save"))) {
+							GcConfig.saveConfig();
+							player.sendMessage(ChatColor.GREEN + "saved.");
+						} else {
+							player.sendMessage(ChatColor.DARK_RED + "You do not have permission to use that command.");
+						}
+					} else if (configType.equals("list")) {
+						player.sendMessage("-- config list [" + configPath + "] --");
+						for(String key : GcConfig.getConfigKey(configPath)) {
+							player.sendMessage(key);
+						}
+					} else if (configType.equals("show")) {
+						player.sendMessage("" + ChatColor.GRAY + configPath + " = [" + ChatColor.AQUA + GcConfig.getConfig(configPath) + ChatColor.GRAY + "]");
+					} else if (configType.equals("change")) {
+						String prev = GcConfig.getConfig(configPath);
+						if ((player.isOp()) || (player.hasPermission("golf.change"))) {
+							if (GcConfig.setConfig(configPath, configValue)) {
+								player.sendMessage("" + ChatColor.GREEN + "change success. "
+									+ ChatColor.GRAY + "[" + ChatColor.RED + prev + ChatColor.GRAY + "] => "
+									+ "[" + ChatColor.GREEN + configValue + "]");
+							} else {
+								player.sendMessage("" + ChatColor.RED + "don't changed.");
+							}
+						} else {
+							player.sendMessage(ChatColor.DARK_RED + "You do not have permission to use that command.");
+						}
+					}
+					
+					return true;
+				}
+				
 				if (Command.equalsIgnoreCase("delete")) {
 					String holeName = null;
 					try {
