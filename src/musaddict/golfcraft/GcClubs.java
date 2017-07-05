@@ -1,6 +1,8 @@
 package musaddict.golfcraft;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,96 +12,44 @@ import org.bukkit.entity.Player;
 
 public class GcClubs
 {
+	private static String ClubNameList[] = {
+		"Driver (1 wood)", "3 wood", "5 wood", "4 iron", "5 iron", "6 iron", "7 iron", "8 iron", "9 iron", "Pitching Wedge", "Sand Wedge", "Putter"
+	};
+	
 	public static HashMap<Player, Integer> Club = new HashMap<Player, Integer>();
 	public static HashMap<Player, Float> Force = new HashMap<Player, Float>();
 
 	public static String getClubMessage(Player player) {
 		int club = ((Integer)Club.get(player)).intValue();
-		String message = "Unknown club";
-		if (club == 0) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "Driver (1 wood)" + ChatColor.GRAY + "]";
+		if (club < 0 || ClubNameList.length <= club) {
+			return "Unknown club";
 		}
-		if (club == 1) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "3 wood" + ChatColor.GRAY + "]";
-		}
-		if (club == 2) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "5 wood" + ChatColor.GRAY + "]";
-		}
-		if (club == 3) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "4 iron" + ChatColor.GRAY + "]";
-		}
-		if (club == 4) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "5 iron" + ChatColor.GRAY + "]";
-		}
-		if (club == 5) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "6 iron" + ChatColor.GRAY + "]";
-		}
-		if (club == 6) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "7 iron" + ChatColor.GRAY + "]";
-		}
-		if (club == 7) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "8 iron" + ChatColor.GRAY + "]";
-		}
-		if (club == 8) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "9 iron" + ChatColor.GRAY + "]";
-		}
-		if (club == 9) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "Pitching Wedge" + ChatColor.GRAY + "]";
-		}
-		if (club == 10) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "Sand Wedge" + ChatColor.GRAY + "]";
-		}
-		if (club == 11) {
-			message = ChatColor.GRAY + "[" + ChatColor.GOLD + "Putter" + ChatColor.GRAY + "]";
-		}
+		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
+		GcConfig.LandedBlock landedBlock = GcConfig.whereLandedBlock(block.getType(), block.getData());
+		String message
+			= ChatColor.GRAY + "[" + ChatColor.GOLD + ClubNameList[club] + ChatColor.GRAY + "]"
+			+ ChatColor.GRAY + "    on the " + ChatColor.GREEN + landedBlock.getName() + ChatColor.GRAY + "."
+			+ " max " + ChatColor.AQUA + GcConfig.getLeapString(club, landedBlock) + ChatColor.GRAY + " [run(carry)]";
 		return message;
 	}
 
 	public static String getClubMessage2(Player player) {
 		int club = ((Integer)Club.get(player)).intValue();
-		String message = "Unknown club";
-		if (club == 0) {
-			message = ChatColor.GRAY + "Driver (1 wood)";
+		if (club < 0 || ClubNameList.length <= club) {
+			return "Unknown club";
 		}
-		if (club == 1) {
-			message = ChatColor.GRAY + "3 wood";
-		}
-		if (club == 2) {
-			message = ChatColor.GRAY + "5 wood";
-		}
-		if (club == 3) {
-			message = ChatColor.GRAY + "4 iron";
-		}
-		if (club == 4) {
-			message = ChatColor.GRAY + "5 iron";
-		}
-		if (club == 5) {
-			message = ChatColor.GRAY + "6 iron";
-		}
-		if (club == 6) {
-			message = ChatColor.GRAY + "7 iron";
-		}
-		if (club == 7) {
-			message = ChatColor.GRAY + "8 iron";
-		}
-		if (club == 8) {
-			message = ChatColor.GRAY + "9 iron";
-		}
-		if (club == 9) {
-			message = ChatColor.GRAY + "Pitching Wedge";
-		}
-		if (club == 10) {
-			message = ChatColor.GRAY + "Sand Wedge";
-		}
-		if (club == 11) {
-			message = ChatColor.GRAY + "Putter";
-		}
-		return message;
+		return ChatColor.GRAY + ClubNameList[club];
 	}
 
 	public static Double getClubSpeed(Player player) {
 		int club = ((Integer)Club.get(player)).intValue();
 		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
+		return GcConfig.getClubSpeed(
+				club,
+				GcConfig.whereLandedBlock(block.getType(), block.getData())
+			); 
+		
+		/*
 		if (club == 0) {
 //			if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.GRASS) {
 			if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.ROUGH, block.getType(), block.getData())) {
@@ -110,7 +60,7 @@ public class GcClubs
 				return Double.valueOf(0.35D);
 			}
 //			if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.WOOD) {
-			if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.DRIVER, block.getType(), block.getData())) {
+			if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.TEE, block.getType(), block.getData())) {
 				return Double.valueOf(1.63D);
 			}
 			return Double.valueOf(1.25D);
@@ -125,7 +75,7 @@ public class GcClubs
 				return Double.valueOf(0.35D);
 			}
 //			if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.WOOD) {
-			if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.DRIVER, block.getType(), block.getData())) {
+			if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.TEE, block.getType(), block.getData())) {
 				return Double.valueOf(1.49D);
 			}
 			return Double.valueOf(1.2D);
@@ -136,7 +86,7 @@ public class GcClubs
 				return Double.valueOf(0.35D);
 			}
 //			if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.WOOD) {
-			if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.DRIVER, block.getType(), block.getData())) {
+			if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.TEE, block.getType(), block.getData())) {
 				return Double.valueOf(1.35D);
 			}
 			return Double.valueOf(1.15D);
@@ -209,6 +159,7 @@ public class GcClubs
 			return Double.valueOf(0.45D);
 		}
 		return Double.valueOf(1.0D);
+		/**/
 	}
 
 	public static Float getClubPitch(Player player) {

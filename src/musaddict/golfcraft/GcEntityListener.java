@@ -161,7 +161,7 @@ implements Listener
 								shooter.sendMessage(ChatColor.GRAY + "The rough reduced your speed by " + ChatColor.YELLOW + chance + "%");
 							}
 //							if (shooter.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.WOOD) {
-							if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.DRIVER, block.getType(), block.getData())) {
+							if (GcConfig.sameLandedBlock(GcConfig.LandedBlock.TEE, block.getType(), block.getData())) {
 								int chance = new Random().nextInt(GcConfig.teeingGroundChance());
 								chance = GcConfig.teeingGroundBase() + chance;
 								double calcChance = chance / 100.0D;
