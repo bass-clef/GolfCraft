@@ -158,7 +158,7 @@ public class GcSigns implements Listener
               
               GcEntityListener.signExists.remove(player);
             }
-            Location tpHoleLoc = GcFiles.getHole(player.getWorld().getName(), hole).getBlock().getLocation();
+            Location tpHoleLoc = GcFiles.getHole(player.getWorld().getName(), hole).getLocation();
             player.teleport(tpHoleLoc);
             
             if (GcCommands.Golfing.containsKey(player)) {
