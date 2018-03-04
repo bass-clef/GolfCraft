@@ -2,8 +2,10 @@ package musaddict.golfcraft;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 
 public class GcHole
@@ -14,23 +16,28 @@ public class GcHole
   public int x;
   public int y;
   public int z;
+  public int hAxis;
+  public int vAxis;
   
   public GcHole(String worldName, String hole, int par)
   {
-    this(Bukkit.getWorld(worldName), hole, par, 0, 0, 0);
+    this(Bukkit.getWorld(worldName), hole, par, 0, 0, 0, 0, 0);
   }
   
-  public GcHole(String worldName, String hole, int par, int x, int y, int z)
+  public GcHole(String worldName, String hole, int par, int x, int y, int z, int hAxis, int vAxis)
   {
-    this(Bukkit.getWorld(worldName), hole, par, x, y, z);
+    this(Bukkit.getWorld(worldName), hole, par, x, y, z, hAxis, vAxis);
   }
   
-  public GcHole(String worldName, String hole, int par, Block block)
+  public GcHole(String worldName, String hole, int par, Location location)
   {
-    this(Bukkit.getWorld(worldName), hole, par, block.getX(), block.getY(), block.getZ());
+    this(Bukkit.getWorld(worldName), hole, par,
+    		location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+    		(int)location.getYaw(), (int)location.getPitch()
+    		);
   }
   
-  public GcHole(World world, String hole, int par, int x, int y, int z)
+  public GcHole(World world, String hole, int par, int x, int y, int z, int hAxis, int vAxis)
   {
     this.world = world;
     this.hole = hole;
@@ -38,6 +45,8 @@ public class GcHole
     this.x = x;
     this.y = y;
     this.z = z;
+    this.hAxis = hAxis;
+    this.vAxis = vAxis;
   }
   
   public String toString()
@@ -45,9 +54,9 @@ public class GcHole
     return this.world.getName() + ";" + this.hole + ";" + this.par;
   }
   
-  public Block getBlock()
+  public Location getLocation()
   {
-    return this.world.getBlockAt(this.x, this.y, this.z);
+    return new Location(this.world, (double)this.x, (double)this.y, (double)this.z, (float)this.hAxis, (float)this.vAxis);
   }
   
 

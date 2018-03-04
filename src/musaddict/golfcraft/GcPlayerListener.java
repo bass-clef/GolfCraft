@@ -66,6 +66,7 @@ public class GcPlayerListener implements Listener
 					if (lines[1].equals(ChatColor.DARK_GRAY + player.getName())) {
 						if ((GcCommands.Golfing.containsKey(player)) && 
 								(((Boolean)GcCommands.Golfing.get(player)).booleanValue())) {
+							// golf start
 							while (player.getInventory().contains(Material.ARROW)) {
 								player.getInventory().remove(Material.ARROW);
 							}

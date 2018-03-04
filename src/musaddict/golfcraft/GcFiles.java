@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.logging.Level;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,7 +14,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.w3c.dom.Document;
@@ -29,7 +32,13 @@ public class GcFiles
 
 	private static ArrayList<GcHole> HoleList;
 
-
+	public static int parseInt(String value, int defaultValue) {
+		try {
+			return Integer.parseInt(value);
+		} catch(NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 
 	public static void load()
 	{
@@ -93,10 +102,14 @@ public class GcFiles
 
 						World world = Bukkit.getWorld(doorElement.getAttribute("world"));
 						String hole = doorElement.getAttribute("hole");
-						int par = Integer.parseInt(doorElement.getAttribute("par"));
-						int x = Integer.parseInt(doorElement.getAttribute("x"));int y = Integer.parseInt(doorElement.getAttribute("y"));int z = Integer.parseInt(doorElement.getAttribute("z"));
+						int par = parseInt(doorElement.getAttribute("par"), 1);
+						int x = parseInt(doorElement.getAttribute("x"), 0);
+						int y = parseInt(doorElement.getAttribute("y"), 0);
+						int z = parseInt(doorElement.getAttribute("z"), 0);
+						int hAxis = parseInt(doorElement.getAttribute("hAxis"), 0);
+						int vAxis = parseInt(doorElement.getAttribute("vAxis"), 0);
 
-						HoleList.add(new GcHole(world, hole, par, x, y, z));
+						HoleList.add(new GcHole(world, hole, par, x, y, z, hAxis, vAxis));
 					}
 				}
 			}
@@ -150,6 +163,8 @@ public class GcFiles
 				doorElement.setAttribute("x", String.valueOf(hole.x));
 				doorElement.setAttribute("y", String.valueOf(hole.y));
 				doorElement.setAttribute("z", String.valueOf(hole.z));
+				doorElement.setAttribute("hAxis", String.valueOf(hole.hAxis));
+				doorElement.setAttribute("vAxis", String.valueOf(hole.vAxis));
 				fileVersionElement.appendChild(doorElement);
 			}
 

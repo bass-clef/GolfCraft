@@ -368,11 +368,10 @@ implements CommandExecutor
 					int parAmount = Integer.parseInt(testString);
 
 					if (!holeName.equals(null)) {
-						Block block = player.getLocation().getBlock();
 						if ((player.isOp()) || (player.hasPermission("golf.create"))) {
 							if (!GcFiles.holeExists(player, holeName, parAmount))
 							{
-								GcFiles.addHole(new GcHole(player.getWorld().getName(), holeName, parAmount, block));
+								GcFiles.addHole(new GcHole(player.getWorld().getName(), holeName, parAmount, player.getLocation()));
 								GcFiles.save();
 								player.sendMessage(ChatColor.GREEN + "You have created " + ChatColor.AQUA + holeName + ": par " + parAmount);
 								return true;
@@ -424,7 +423,7 @@ implements CommandExecutor
 
 									GcEntityListener.signExists.remove(player);
 								}
-								Location tpHoleLoc = GcFiles.getHole(player.getWorld().getName(), holeName).getBlock().getLocation();
+								Location tpHoleLoc = GcFiles.getHole(player.getWorld().getName(), holeName).getLocation();
 								player.teleport(tpHoleLoc);
 
 								if (Golfing.containsKey(player))
